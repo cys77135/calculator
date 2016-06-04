@@ -19,8 +19,9 @@ int main(){
 			dot_count[i]=0;
 		}
 		scan();
-		sum(0,1);
-		print(1);
+		for(i=0;i<strlen(what);i++)
+			sum(i,i+1);
+		print(i);
 	}
 }
 void scan(){
@@ -59,13 +60,12 @@ void scan(){
 			what[k++]=a[i];
 			check_dot=0;
 			j=1;
+			what[k]='\0';
 		}
 		else if(a[i]==' '){
 			check_dot=0;
 			j=1;
 		}
-		else
-			printf("= error\n");
 	}
 	if(!strcmp(a,"clear"))
 		system("clear");
@@ -113,18 +113,18 @@ void sum(int n1,int n2){
 	int i;
 	char result[60]={0};
 	if(num[n1][0]==num[n2][0]){
-		if(num[n1][0])
-			num[n2][0]=1;
+		if(num[n2][0])
+			result[0]=1;
 		if(size[n1]>size[n2])
 			size[n2]=size[n1];
-		for(i=59;i>=0;i--){
+		for(i=59;i>0;i--){
 			result[i]+=num[n1][i]+num[n2][i];
 			if(result[i]>9){
 				result[i-1]+=result[i]/10;
 				result[i]=result[i]%10;
 			}
 		}
-		if(result[60-size[n2]]>0)
+		if(result[50-size[n2]]>0)
 			size[n2]++;
 		if(dot_count[n1]>dot_count[n2])
 			dot_count[n2]=dot_count[n1];
