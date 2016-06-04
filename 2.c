@@ -1,9 +1,9 @@
 #include<stdio.h>
 #include<string.h>
 #include<stdlib.h>
-char num[101][60]={0};
-char size[101]={0};
-char dot_count[101]={0};
+char num[100][60]={0};
+char size[100]={0};
+char dot_count[100]={0};
 char what[100]={0};
 void scan();
 void print(int);
@@ -20,11 +20,11 @@ int main(){
 		}
 		scan();
 		sum(0,1);
-		print(100);
+		print(1);
 	}
 }
 void scan(){
-	int n=0,i,j=0,max;
+	int n=0,i,j=1,k=0,max;
 	char tmp;
 	char a[1000];
 	_Bool check_dot=0;
@@ -39,6 +39,8 @@ void scan(){
 	a[max]='\0';
 	for(i=0;i<=max;i++){
 		if((a[i]>='0'&&a[i]<='9')&&check_dot==0){
+			if(a[i-1]=='-')
+				num[n][0]=1;
 			size[n]++;
 			num[n][j++]=a[i]-'0';
 		}
@@ -52,29 +54,36 @@ void scan(){
 		}
 		else if(a[i]=='\n')
 			break;
-		else if(a[i]=='+'||a[i]=='-'||a[i]=='*'||a[i]=='/'){
+		else if((a[i]=='+'||a[i]=='-'||a[i]=='*'||a[i]=='/')&&!(a[i+1]>='0'&&a[i+1]<='9')){
 			n++;
-			what[j++]=a[i];
+			what[k++]=a[i];
 			check_dot=0;
-			j=0;
+			j=1;
 		}
 		else if(a[i]==' '){
 			check_dot=0;
-			j=0;
+			j=1;
 		}
+		else
+			printf("= error\n");
 	}
+	if(!strcmp(a,"clear"))
+		system("clear");
+	else if(!strcmp(a,"end"))
+		exit(1);
 	for(n=0;n<100;n++){
-		for(j=50,i=size[n]-1;i>=0;i--,j--){
+		for(j=50,i=size[n];i>=1;i--,j--){
 			num[n][j]=num[n][i];
 			num[n][i]=0;
 		}
 	}
-	if(!strcmp(a,"clear"))
-			system("clear");
 }
 void print(int n){
 	int count=3,first,i;
 	first=size[n]%3;
+	printf("= ");
+	if(num[n][0])
+		printf("-");
 	for(i=51-size[n];i<=50;i++){
 		first--;
 		if(count&&first<0)
@@ -102,21 +111,24 @@ void print(int n){
 }
 void sum(int n1,int n2){
 	int i;
-	if(size[n1]>size[n2])
-		size[100]=size[n1];
-	else
-		size[100]=size[n2];
-	for(i=59;i>=0;i--){
-		num[100][i]+=num[n1][i]+num[n2][i];
-		if(num[100][i]>9){
-			num[100][i-1]+=num[100][i]/10;
-			num[100][i]=num[100][i]%10;
+	char result[60]={0};
+	if(num[n1][0]==num[n2][0]){
+		if(num[n1][0])
+			num[n2][0]=1;
+		if(size[n1]>size[n2])
+			size[n2]=size[n1];
+		for(i=59;i>=0;i--){
+			result[i]+=num[n1][i]+num[n2][i];
+			if(result[i]>9){
+				result[i-1]+=result[i]/10;
+				result[i]=result[i]%10;
+			}
 		}
+		if(result[60-size[n2]]>0)
+			size[n2]++;
+		if(dot_count[n1]>dot_count[n2])
+			dot_count[n2]=dot_count[n1];
 	}
-	if(num[100][50-size[100]]>0)
-		size[100]++;
-	if(dot_count[n1]>dot_count[n2])
-		dot_count[100]=dot_count[n1];
-	else
-		dot_count[100]=dot_count[n2];
+	for(i=0;i<60;i++)
+		num[n2][i]=result[i];
 }
