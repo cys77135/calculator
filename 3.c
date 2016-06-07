@@ -181,6 +181,14 @@ void min(int n1,int n2){
 			break;
 		}
 	}
+	for(i=0;i<60;i++){
+		if(num[n1][i]==num[n2][i]){
+			l++;
+		}
+	}
+	if(l==60){
+		k=1;
+	}
 	size[n2]=k;
 	for(i=1;i<60;i++){
 		num[n2][i]=result[i];
