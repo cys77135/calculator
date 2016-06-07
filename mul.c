@@ -8,8 +8,10 @@ char what[100]={0};
 void scan();
 void print(int);
 void sum(int,int);
+void min(int,int);
 void mul(int,int);
 void di(int,int);
+
 
 int main(){
 	int i=0,j;
@@ -133,6 +135,46 @@ void sum(int n1,int n2){
 	}
 	for(i=0;i<60;i++)
 		num[n2][i]=result[i];
+}
+void min(int n1,int n2){
+	int i,j,k=0,l=0;
+	char result[60]={0},ex[60]={0};
+	if(size[n2]>size[n1]){
+		num[n2][0]=1;
+		for(i=1;i<60;i++){
+			ex[i]=num[n1][i];
+			num[n1][i]=num[n2][i];
+			num[n2][i]=ex[i];
+		}
+	}
+	for(i=59;i>0;i--){
+		if(num[n1][i]>=num[n2][i]){
+			result[i]+=num[n1][i]-num[n2][i];
+			if(result[i]<0){
+				result[i]+=10;
+				result[i-1]-=1;
+			}
+		}
+		else{
+			result[i]+=num[n1][i]+10-num[n2][i];
+			result[i-1]-=1;
+		}
+	}
+	for(i=1;i<60;i++){
+		if(result[i]>0){
+			for(j=i;j<51;j++){
+				k++;
+			}
+			break;
+		}
+	}
+	size[n2]=k;
+	for(i=1;i<60;i++){
+		num[n2][i]=result[i];
+	}
+	if(dot_count[n1]>dot_count[n2]){
+		dot_count[n2]=dot_count[n1];
+	}
 }
 void mul(int n1,int n2)
 {
