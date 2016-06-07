@@ -146,8 +146,6 @@ void mul(int n1,int n2)
 				result[118-i-j]=(result[118-i-j]+num[n1][i]*num[n2][j])%10;
 		}
 	}
-    if(result[18+size[n2]]>0)
-        size[n2]++;
 	size[n2]+=size[n1]-dot_count[n1]-dot_count[n2]-1;
 	if(result[18+size[n2]]>0)
 		size[n2]++;
