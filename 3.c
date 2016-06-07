@@ -134,9 +134,17 @@ void sum(int n1,int n2){
 		num[n2][i]=result[i];
 }
 void min(int n1,int n2){
-	int i,j,k=0;
-	char result[60]={0};
-	for(i=59;i>=0;i--){
+	int i,j,k=0,l=0;
+	char result[60]={0},ex[60]={0};
+	if(size[n2]>size[n1]){
+		num[n2][0]=1;
+		for(i=1;i<60;i++){
+			ex[i]=num[n1][i];
+			num[n1][i]=num[n2][i];
+			num[n2][i]=ex[i];
+		}
+	}
+	for(i=59;i>0;i--){
 		if(num[n1][i]>=num[n2][i]){
 			result[i]+=num[n1][i]-num[n2][i];
 			if(result[i]<0){
@@ -149,7 +157,7 @@ void min(int n1,int n2){
 			result[i-1]-=1;
 		}
 	}
-	for(i=0;i<60;i++){
+	for(i=1;i<60;i++){
 		if(result[i]>0){
 			for(j=i;j<51;j++){
 				k++;
@@ -158,7 +166,7 @@ void min(int n1,int n2){
 		}
 	}
 	size[n2]=k;
-	for(i=0;i<60;i++){
+	for(i=1;i<60;i++){
 		num[n2][i]=result[i];
 	}
 	if(dot_count[n1]>dot_count[n2]){
