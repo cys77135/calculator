@@ -11,10 +11,10 @@ void print(int);
 void sum(int,int);
 void min(int,int);
 void mul(int,int);
-void di(int,int);
+void copy(int,int);
 
 int main(){
-	int i=0,j;
+	int i=0,j,count=0;
 	while(1){
 		for(i=0;i<=100;i++){
 			for(j=0;j<60;j++)
@@ -23,9 +23,29 @@ int main(){
 			dot_count[i]=0;
 		}
 		scan();
-		for(i=0;i<strlen(what);i++)
-			min(i,i+1);
-		print(i);
+		for(i=0;i<strlen(what);i++){
+			if(what[i]=='*')
+				mul(i,i+1);
+		}
+		for(i=0;i<strlen(what);i++){
+			if(what[i]=='+'||what[i]=='-'){
+				j=i+1;
+				count=0;
+				while(j<strlen(what)){
+					if(what[j]=='*'||what[j]=='/'||what[j]=='%'){
+						count++;
+						j++;
+					}
+					else
+						break;
+				} 
+				if(what[i]=='+')
+					sum(i,i+1+count);
+				else if(what[i]=='-')
+					min(i,i+1+count); 
+			}
+		}
+		print(strlen(what));
 	}
 }
 void scan(){
@@ -132,77 +152,107 @@ void sum(int n1,int n2){
 			size[n2]++;
 		if(dot_count[n1]>dot_count[n2])
 			dot_count[n2]=dot_count[n1];
+		for(i=0;i<60;i++)
+			num[n2][i]=result[i];
 	}
-	for(i=0;i<60;i++)
-		num[n2][i]=result[i];
+/*	else if(num[n2][0]){
+		num[n2][0]=0;
+		min(n1,n2);
+	}
+	else if(num[n1][0]){
+		num[n1][0]=0;
+		min(n2,n1);
+		copy(n1,n2);
+	}*/
 }
 void min(int n1,int n2){
 	int i,j,k=0,l=0;
 	char result[60]={0},ex[60]={0};
-	if(size[n2]>=size[n1]){
-		if(size[n2]==size[n1]){
-			for(i=1;i<60;i++){
-				if(num[n1][i]==num[n2][i]){
-					if(num[n1][i+1]<num[n2][i+1]){
-						num[n2][0]=1;
-						for(j=1;j<60;j++){
-							ex[j]=num[n1][j];
-							num[n1][j]=num[n2][j];
-							num[n2][j]=ex[j];
+	if(!num[n1][0]&&!num[n2][0]){
+		if(size[n2]>=size[n1]){
+			if(size[n2]==size[n1]){
+				for(i=1;i<60;i++){
+					if(num[n1][i]==num[n2][i]){
+						if(num[n1][i+1]<num[n2][i+1]){
+							num[n2][0]=1;
+							for(j=1;j<60;j++){
+								ex[j]=num[n1][j];
+								num[n1][j]=num[n2][j];
+								num[n2][j]=ex[j];
+							}
 						}
 					}
 				}
 			}
-		}
-		else{
-			num[n2][0]=1;
-			for(i=1;i<60;i++){
-				ex[i]=num[n1][i];
-				num[n1][i]=num[n2][i];
-				num[n2][i]=ex[i];
+			else{
+				num[n2][0]=1;
+				for(i=1;i<60;i++){
+					ex[i]=num[n1][i];
+					num[n1][i]=num[n2][i];
+					num[n2][i]=ex[i];
+				}
 			}
 		}
-	}
-	for(i=59;i>0;i--){
-		if(num[n1][i]>=num[n2][i]){
-			result[i]+=num[n1][i]-num[n2][i];
-			if(result[i]<0){
-				result[i]+=10;
+		for(i=59;i>0;i--){
+			if(num[n1][i]>=num[n2][i]){
+				result[i]+=num[n1][i]-num[n2][i];
+				if(result[i]<0){
+					result[i]+=10;
+					result[i-1]-=1;
+				}
+			}
+			else{
+				result[i]+=num[n1][i]+10-num[n2][i];
 				result[i-1]-=1;
 			}
 		}
-		else{
-			result[i]+=num[n1][i]+10-num[n2][i];
-			result[i-1]-=1;
-		}
-	}
-	for(i=1;i<60;i++){
-		if(result[i]>0){
-			for(j=i;j<51;j++){
-				k++;
+		for(i=1;i<60;i++){
+			if(result[i]>0){
+				for(j=i;j<51;j++){
+					k++;
+				}
+				break;
 			}
-			break;
+		}
+		for(i=0;i<60;i++){
+			if(num[n1][i]==num[n2][i]){
+				l++;
+			}
+		}
+		if(l==60){
+			k=1;
+		}
+		size[n2]=k;
+		for(i=1;i<60;i++){
+			num[n2][i]=result[i];
+		}
+		if(dot_count[n1]>dot_count[n2]){
+			dot_count[n2]=dot_count[n1];
 		}
 	}
-	for(i=0;i<60;i++){
-		if(num[n1][i]==num[n2][i]){
-			l++;
-		}
+	else if(num[n1][0]&&!num[n2][0]){
+		num[n2][0]=1;
+		sum(n1,n2);
 	}
-	if(l==60){
-		k=1;
+	else if(!num[n1][0]&&num[n2][0]){
+		num[n2][0]=0;
+		sum(n1,n2);
 	}
-	size[n2]=k;
-	for(i=1;i<60;i++){
-		num[n2][i]=result[i];
+	else if(num[n1][0]&&num[n2][0]){
+		num[n1][0]=0;
+		num[n2][0]=0;
+		min(n2,n1);
+		copy(n1,n2);
 	}
-	if(dot_count[n1]>dot_count[n2]){
-		dot_count[n2]=dot_count[n1];
-	}
-}void mul(int n1,int n2)
+}
+void mul(int n1,int n2)
 {
-	int i,j,b=59,c1=0,t;
+	int a,i,j,b=59,c1=0,t;
 	char result[200]={0};
+	if(num[n1][0]!=num[n2][0])
+		num[n2][0]=1;
+	else
+		num[n2][0]=0;
 	for(i=59;i>0;i--){
 		for(j=59;j>0;j--){
 			if(num[n1][i] && num[n2][j])
@@ -211,7 +261,7 @@ void min(int n1,int n2){
 				result[118-i-j]=(result[118-i-j]+num[n1][i]*num[n2][j])%10;
 		}
 	}
-	for(int a=size[n1]+size[n2];a>=0;--a)
+	for(a=size[n1]+size[n2];a>=0;--a)
 	{
 		if(result[18+a]){
 			size[n2]=a+1;
@@ -220,7 +270,7 @@ void min(int n1,int n2){
 		else if(a==0)
 			size[n2]=1;
 	}
-	for(int a=9;a<67;++a,--b){
+	for(a=9;a<67;++a,--b){
 		if(c1==0 && b > 50 && result[a]!=0){
 			c1++;
 			dot_count[n2] = b-50;
@@ -230,52 +280,10 @@ void min(int n1,int n2){
 		num[n2][b]=result[a];
 	}
 }
-void di(int n1,int n2)
-{
-	int al=50;
-	char result[60]={0},ex[60]={0},cou=0;
-	for(int a=0;a<60;a++)
-		ex[a]=num[n2][a];
-	while(nu(n1,n2)==2){
-		for(int a= 59;a>=0;--a)
-			num[n2][a]=num[n2][a-1];
-		--al;
-		num[n2][0]=0;
-		for(int a=0;a<60;a++)
-			ex[a]=num[n2][a];
-	}
-	while(nu(n1,n2)==1){
-		for(int a=1;a<60;++a)
-			num[n2][a-1]=num[n2][a]
-				++al;
-		num[n2][0]=0;
-		for(int a=0;a<60;a++)
-			ex[a]=num[n2][a];                  //자리 바꿀때 어디에 0처리 할지 다시,, 자리바꾸기
-	}
-	while(nu(n1,n2)!=0&&al<=59){
-		min(n1,n2);
-		for(int a=0;a<60;++a)
-			num[n1][a]=num[n2][a];
-		for(int a=0;a<60;a++)
-			num[n2][a]=ex[a];
-        cou++;
-    }
+void copy(int n1,int n2){
+	int i=0;
+	for(i=0;i<60;i++)
+		num[n2][i]=num[n1][i];
+	size[n2]=size[n1];
+	dot_count[n2]=dot_count[n1];
 }
-
-
-
-
-	int nu(int n1,int n2)
-	{
-		for(i=0;i<60;i++){
-			if(num[n1][i]>num[n2][i]){
-				return 2;
-				break;
-			}
-			if(num[n1][i]<num[n2][i]){
-				return 1;
-				break;
-			}
-		}
-		return 0;
-	}
