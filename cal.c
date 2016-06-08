@@ -6,7 +6,7 @@ char size[100]={0};
 char dot_count[100]={0};
 char what[100]={0};
 char re[60]={0};
-void scan();
+int scan();
 void print(int);
 void sum(int,int);
 void min(int,int);
@@ -25,37 +25,39 @@ int main(){
 			size[i]=0;
 			dot_count[i]=0;
 		}
-		scan();
-		for(i=0;i<strlen(what);i++){
-			if(what[i]=='*')
-				mul(i,i+1);
-			if(what[i]=='/')
-				di(i,i+1);
-			if(what[i]=='%')
-				rem(i,i+1);
-		}
-		for(i=0;i<strlen(what);i++){
-			if(what[i]=='+'||what[i]=='-'){
-				j=i+1;
-				count=0;
-				while(j<strlen(what)){
-					if(what[j]=='*'||what[j]=='/'||what[j]=='%'){
-						count++;
-						j++;
-					}
-					else
-						break;
-				} 
-				if(what[i]=='+')
-					sum(i,i+1+count);
-				else if(what[i]=='-')
-					min(i,i+1+count); 
+		if(scan()){
+			for(i=0;i<strlen(what);i++){
+				if(what[i]=='*')
+					mul(i,i+1);
+				if(what[i]=='/')
+					di(i,i+1);
+				if(what[i]=='%')
+					rem(i,i+1);
 			}
+			for(i=0;i<strlen(what);i++){
+				if(what[i]=='+'||what[i]=='-'){
+					j=i+1;
+					count=0;
+					while(j<strlen(what)){
+						if(what[j]=='*'||what[j]=='/'||what[j]=='%'){
+							count++;
+							j++;
+						}
+						else
+							break;
+					} 
+					if(what[i]=='+')
+						sum(i,i+1+count);
+					else if(what[i]=='-')
+						min(i,i+1+count); 
+				}
+			}
+			print(strlen(what));
 		}
-		print(strlen(what));
 	}
 }
-void scan(){
+
+int scan(){
 	int n=0,i,j=1,k=0,max;
 	char tmp;
 	char a[1000];
@@ -98,9 +100,11 @@ void scan(){
 			j=1;
 		}
 	}
-	if(!strcmp(a,"clear"))
+	if(!strcmp(a,"clear")){
 		system("clear");
-	else if(!strcmp(a,"end"))
+		return 0;
+	}
+	if(!strcmp(a,"end"))
 		exit(1);
 	for(n=0;n<100;n++){
 		for(j=50,i=size[n];i>=1;i--,j--){
@@ -108,6 +112,7 @@ void scan(){
 			num[n][i]=0;
 		}
 	}
+	return 1;
 }
 void print(int n){
 	int count=3,first,i;
@@ -332,10 +337,10 @@ void di(int n1,int n2)
 		}
 		result[al]=cou;
 		cou=0;
-        if(al==50){
-            for(a=0;a<=60;++a)
-                re[a]=num[n1][a];
-        }
+		if(al==50){
+			for(a=0;a<=60;++a)
+				re[a]=num[n1][a];
+		}
 		if(nu(n1,n2)==0) break;
 		for(a=59;a>0;--a)
 			num[n2][a]=num[n2][a-1];
@@ -369,34 +374,34 @@ void rem(int n1,int n2)
 {
 	int a;
 	if(nu(n1,n2)==2){
-            di(n1,n2);
-        for(a=0;a<=60;a++)
-            num[n2][a]=re[a];
-        for(a=1;a<=50;a++){
-            if(re[a]){
-                size[n2]=50-a+1;
-                break;
-            }
-            if(a==50)
-                size[n2]=1;
-        }
-        for(a=59;a>50;--a){
-            if(re[a]){
-                dot_count[n2]=a-50;
-                break;
-            }
-            else if(a==51)
-                dot_count[n2]=0;
-        }
+		di(n1,n2);
+		for(a=0;a<=60;a++)
+			num[n2][a]=re[a];
+		for(a=1;a<=50;a++){
+			if(re[a]){
+				size[n2]=50-a+1;
+				break;
+			}
+			if(a==50)
+				size[n2]=1;
+		}
+		for(a=59;a>50;--a){
+			if(re[a]){
+				dot_count[n2]=a-50;
+				break;
+			}
+			else if(a==51)
+				dot_count[n2]=0;
+		}
 	}
-    else if(nu(n1,n2)==0){
-        for(a=0;a<60;++a)
-            num[n2][a]=0;
-    }
+	else if(nu(n1,n2)==0){
+		for(a=0;a<60;++a)
+			num[n2][a]=0;
+	}
 	else if(nu(n1,n2)==1){
 		for(a=0;a<60;a++)
 			num[n2][a]=num[n1][a];
-        size[n2]=size[n1];
+		size[n2]=size[n1];
 	}
 }
 int nu(int n1,int n2)
