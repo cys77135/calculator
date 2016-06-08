@@ -29,6 +29,10 @@ int main(){
 		for(i=0;i<strlen(what);i++){
 			if(what[i]=='*')
 				mul(i,i+1);
+			if(what[i]=='/')
+				di(i,i+1);
+			if(what[i]=='%')
+				rem(i,i+1);
 		}
 		for(i=0;i<strlen(what);i++){
 			if(what[i]=='+'||what[i]=='-'){
@@ -82,7 +86,7 @@ void scan(){
 		}
 		else if(a[i]=='\n')
 			break;
-		else if((a[i]=='+'||a[i]=='-'||a[i]=='*'||a[i]=='/')&&!(a[i+1]>='0'&&a[i+1]<='9')){
+		else if((a[i]=='+'||a[i]=='-'||a[i]=='*'||a[i]=='/'||a[i]=='%')&&!(a[i+1]>='0'&&a[i+1]<='9')){
 			n++;
 			what[k++]=a[i];
 			check_dot=0;
@@ -158,7 +162,7 @@ void sum(int n1,int n2){
 		for(i=0;i<60;i++)
 			num[n2][i]=result[i];
 	}
-/*	else if(num[n2][0]){
+	else if(num[n2][0]){
 		num[n2][0]=0;
 		min(n1,n2);
 	}
@@ -166,7 +170,7 @@ void sum(int n1,int n2){
 		num[n1][0]=0;
 		min(n2,n1);
 		copy(n1,n2);
-	}*/
+	}
 }
 void min(int n1,int n2){
 	int i,j,k=0,l=0;
@@ -285,7 +289,7 @@ void mul(int n1,int n2)
 }
 void di(int n1,int n2)
 {
-	int al=50;
+	int a,al=50;
 	char result[60]={0},ex[60]={0},cou=0,mi=0;
 	if(num[n1][0]==num[n2][0]){
 		num[n1][0]=0;
@@ -296,23 +300,23 @@ void di(int n1,int n2)
 		num[n1][0]=0;
 		num[n2][0]=0;
 	}
-	for(int a=0;a<60;a++)
+	for(a=0;a<60;a++)
 		ex[a]=num[n2][a];
 
 	while(nu(n1,n2)==2){
-		for(int a= 1;a<=59;++a)
+		for(a= 1;a<=59;++a)
 			num[n2][a]=num[n2][a+1];
 		num[n2][59]=0;
 		--al;
-		for(int a=0;a<60;a++)
+		for(a=0;a<60;a++)
 			ex[a]=num[n2][a];
 	}
 	while(nu(n1,n2)==1){
-		for(int a=59;a>1;--a)
+		for(a=59;a>1;--a)
 			num[n2][a]=num[n2][a-1];
 		++al;
 		num[n2][1]=0;
-		for(int a=0;a<60;a++)
+		for(a=0;a<60;a++)
 			ex[a]=num[n2][a];
 	}
 	if(nu(n1,n2)==0)
@@ -320,29 +324,29 @@ void di(int n1,int n2)
 	while(al<=59&&nu(n1,n2)!=0){
 		while(nu(n1,n2)==2||nu(n1,n2)==0){
 			min(n1,n2);
-			for(int a=0;a<60;++a)
+			for(a=0;a<60;++a)
 				num[n1][a]=num[n2][a];
-			for(int a=0;a<60;a++)
+			for(a=0;a<60;a++)
 				num[n2][a]=ex[a];
 			cou++;
 		}
 		result[al]=cou;
 		cou=0;
         if(al==50){
-            for(int a=0;a<=60;++a)
+            for(a=0;a<=60;++a)
                 re[a]=num[n1][a];
         }
 		if(nu(n1,n2)==0) break;
-		for(int a=59;a>0;--a)
+		for(a=59;a>0;--a)
 			num[n2][a]=num[n2][a-1];
 		++al;
 		num[n2][1]=0;
-		for(int a=0;a<60;a++)
+		for(a=0;a<60;a++)
 			ex[a]=num[n2][a];
 	}
-	for(int a=0;a<60;a++)
+	for(a=0;a<60;a++)
 		num[n2][a]=result[a];
-	for(int a=0;a<=50;a++){
+	for(a=0;a<=50;a++){
 		if(result[a]){
 			size[n2]=50-a+1;
 			break;
@@ -350,7 +354,7 @@ void di(int n1,int n2)
 		if(a==50)
 			size[n2]=1;
 	}
-	for(int a=59;a>50;--a){
+	for(a=59;a>50;--a){
 		if(result[a]){
 			dot_count[n2]=a-50;
 			break;
@@ -363,11 +367,12 @@ void di(int n1,int n2)
 }
 void rem(int n1,int n2)
 {
+	int a;
 	if(nu(n1,n2)==2){
             di(n1,n2);
-        for(int a=0;a<=60;a++)
+        for(a=0;a<=60;a++)
             num[n2][a]=re[a];
-            for(int a=1;a<=50;a++){
+        for(a=1;a<=50;a++){
             if(re[a]){
                 size[n2]=50-a+1;
                 break;
@@ -375,7 +380,7 @@ void rem(int n1,int n2)
             if(a==50)
                 size[n2]=1;
         }
-        for(int a=59;a>50;--a){
+        for(a=59;a>50;--a){
             if(re[a]){
                 dot_count[n2]=a-50;
                 break;
@@ -385,18 +390,19 @@ void rem(int n1,int n2)
         }
 	}
     else if(nu(n1,n2)==0){
-        for(int a=0;a<60;++a)
+        for(a=0;a<60;++a)
             num[n2][a]=0;
     }
 	else if(nu(n1,n2)==1){
-		for(int a=0;a<60;a++)
+		for(a=0;a<60;a++)
 			num[n2][a]=num[n1][a];
         size[n2]=size[n1];
 	}
 }
 int nu(int n1,int n2)
 {
-	for(int i=0;i<60;i++){
+	int i;
+	for(i=0;i<60;i++){
 		if(num[n1][i]>num[n2][i]){
 			return 2;
 			break;
