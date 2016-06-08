@@ -363,10 +363,6 @@ void di(int n1,int n2)
 }
 void rem(int n1,int n2)
 {
-	if(num[n1][0]!=num[n2][0])
-	num[n2][0]=1;
-	else
-	num[n2][0]=0;
 	if(nu(n1,n2)==2){
             di(n1,n2);
         for(int a=0;a<=60;a++)
