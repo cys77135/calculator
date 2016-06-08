@@ -5,12 +5,15 @@ char num[100][60]={0};
 char size[100]={0};
 char dot_count[100]={0};
 char what[100]={0};
-char rem[60]={0};
+char re[60]={0};
 void scan();
 void print(int);
 void sum(int,int);
 void min(int,int);
 void mul(int,int);
+void di(int,int);
+void rem(int,int);
+int nu(int,int);
 void copy(int,int);
 
 int main(){
@@ -279,6 +282,135 @@ void mul(int n1,int n2)
 			dot_count[n2] = 0;
 		num[n2][b]=result[a];
 	}
+}
+void di(int n1,int n2)
+{
+	int al=50;
+	char result[60]={0},ex[60]={0},cou=0,mi=0;
+	if(num[n1][0]==num[n2][0]){
+		num[n1][0]=0;
+		num[n2][0]=0;
+	}
+	else if(num[n1][0]!=num[n2][0]){
+		mi++;
+		num[n1][0]=0;
+		num[n2][0]=0;
+	}
+	for(int a=0;a<60;a++)
+		ex[a]=num[n2][a];
+
+	while(nu(n1,n2)==2){
+		for(int a= 1;a<=59;++a)
+			num[n2][a]=num[n2][a+1];
+		num[n2][59]=0;
+		--al;
+		for(int a=0;a<60;a++)
+			ex[a]=num[n2][a];
+	}
+	while(nu(n1,n2)==1){
+		for(int a=59;a>1;--a)
+			num[n2][a]=num[n2][a-1];
+		++al;
+		num[n2][1]=0;
+		for(int a=0;a<60;a++)
+			ex[a]=num[n2][a];
+	}
+	if(nu(n1,n2)==0)
+		result[al]=1;
+	while(al<=59&&nu(n1,n2)!=0){
+		while(nu(n1,n2)==2||nu(n1,n2)==0){
+			min(n1,n2);
+			for(int a=0;a<60;++a)
+				num[n1][a]=num[n2][a];
+			for(int a=0;a<60;a++)
+				num[n2][a]=ex[a];
+			cou++;
+		}
+		result[al]=cou;
+		cou=0;
+        if(al==50){
+            for(int a=0;a<=60;++a)
+                re[a]=num[n1][a];
+        }
+		if(nu(n1,n2)==0) break;
+		for(int a=59;a>0;--a)
+			num[n2][a]=num[n2][a-1];
+		++al;
+		num[n2][1]=0;
+		for(int a=0;a<60;a++)
+			ex[a]=num[n2][a];
+	}
+	for(int a=0;a<60;a++)
+		num[n2][a]=result[a];
+	for(int a=0;a<=50;a++){
+		if(result[a]){
+			size[n2]=50-a+1;
+			break;
+		}
+		if(a==50)
+			size[n2]=1;
+	}
+	for(int a=59;a>50;--a){
+		if(result[a]){
+			dot_count[n2]=a-50;
+			break;
+		}
+		else if(a==51)
+			dot_count[n2]=0;
+	}
+	if(mi)
+		num[n2][0]='-';
+}
+void rem(int n1,int n2)
+{
+	if(num[n1][0]!=num[n2][0])
+	num[n2][0]=1;
+	else
+	num[n2][0]=0;
+	if(nu(n1,n2)==2){
+            di(n1,n2);
+        for(int a=0;a<=60;a++)
+            num[n2][a]=re[a];
+            for(int a=1;a<=50;a++){
+            if(re[a]){
+                size[n2]=50-a+1;
+                break;
+            }
+            if(a==50)
+                size[n2]=1;
+        }
+        for(int a=59;a>50;--a){
+            if(re[a]){
+                dot_count[n2]=a-50;
+                break;
+            }
+            else if(a==51)
+                dot_count[n2]=0;
+        }
+	}
+    else if(nu(n1,n2)==0){
+        for(int a=0;a<60;++a)
+            num[n2][a]=0;
+    }
+	else if(nu(n1,n2)==1){
+		for(int a=0;a<60;a++)
+			num[n2][a]=num[n1][a];
+        size[n2]=size[n1];
+	}
+}
+int nu(int n1,int n2)
+{
+	for(int i=0;i<60;i++){
+		if(num[n1][i]>num[n2][i]){
+			return 2;
+			break;
+		}
+		if(num[n1][i]<num[n2][i]){
+			return 1;
+			break;
+		}
+	}
+	return 0;
 }
 void copy(int n1,int n2){
 	int i=0;
