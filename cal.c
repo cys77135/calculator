@@ -1,0 +1,281 @@
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+char num[100][60]={0};
+char size[100]={0};
+char dot_count[100]={0};
+char what[100]={0};
+char rem[60]={0};
+void scan();
+void print(int);
+void sum(int,int);
+void min(int,int);
+void mul(int,int);
+void di(int,int);
+
+int main(){
+	int i=0,j;
+	while(1){
+		for(i=0;i<=100;i++){
+			for(j=0;j<60;j++)
+				num[i][j]=0;
+			size[i]=0;
+			dot_count[i]=0;
+		}
+		scan();
+		for(i=0;i<strlen(what);i++)
+			min(i,i+1);
+		print(i);
+	}
+}
+void scan(){
+	int n=0,i,j=1,k=0,max;
+	char tmp;
+	char a[1000];
+	_Bool check_dot=0;
+	for(i=0;i<1000;i++){
+		scanf("%c",&tmp);
+		if(tmp=='\n'){
+			max=i;
+			break;
+		}
+		a[i]=tmp;
+	}
+	a[max]='\0';
+	for(i=0;i<=max;i++){
+		if((a[i]>='0'&&a[i]<='9')&&check_dot==0){
+			if(a[i-1]=='-')
+				num[n][0]=1;
+			size[n]++;
+			num[n][j++]=a[i]-'0';
+		}
+		else if(a[i]=='.'){
+			j=51;
+			check_dot=1;
+		}
+		else if((a[i]>='0'&&a[i]<='9')&&check_dot){
+			dot_count[n]+=1;
+			num[n][j++]=a[i]-'0';
+		}
+		else if(a[i]=='\n')
+			break;
+		else if((a[i]=='+'||a[i]=='-'||a[i]=='*'||a[i]=='/')&&!(a[i+1]>='0'&&a[i+1]<='9')){
+			n++;
+			what[k++]=a[i];
+			check_dot=0;
+			j=1;
+			what[k]='\0';
+		}
+		else if(a[i]==' '){
+			check_dot=0;
+			j=1;
+		}
+	}
+	if(!strcmp(a,"clear"))
+		system("clear");
+	else if(!strcmp(a,"end"))
+		exit(1);
+	for(n=0;n<100;n++){
+		for(j=50,i=size[n];i>=1;i--,j--){
+			num[n][j]=num[n][i];
+			num[n][i]=0;
+		}
+	}
+}
+void print(int n){
+	int count=3,first,i;
+	first=size[n]%3;
+	printf("= ");
+	if(num[n][0])
+		printf("-");
+	for(i=51-size[n];i<=50;i++){
+		first--;
+		if(count&&first<0)
+			count--;
+		printf("%d",num[n][i]);
+		if(first==0&&count==3&&i!=50)
+			printf(",");
+		if(count==0&&i!=50){
+			printf(",");
+			count=3;
+		}
+	}
+	if(dot_count[n]>0){
+		count=0;
+		printf(".");
+		for(i=51;i<=50+dot_count[n];i++){
+			printf("%d",num[n][i]);
+			count++;
+			if(count%3==0&&count!=dot_count[n]){
+				printf(",");
+			}
+		}
+	}
+	printf("\n");
+}
+void sum(int n1,int n2){
+	int i;
+	char result[60]={0};
+	if(num[n1][0]==num[n2][0]){
+		if(num[n2][0])
+			result[0]=1;
+		if(size[n1]>size[n2])
+			size[n2]=size[n1];
+		for(i=59;i>0;i--){
+			result[i]+=num[n1][i]+num[n2][i];
+			if(result[i]>9){
+				result[i-1]+=result[i]/10;
+				result[i]=result[i]%10;
+			}
+		}
+		if(result[50-size[n2]]>0)
+			size[n2]++;
+		if(dot_count[n1]>dot_count[n2])
+			dot_count[n2]=dot_count[n1];
+	}
+	for(i=0;i<60;i++)
+		num[n2][i]=result[i];
+}
+void min(int n1,int n2){
+	int i,j,k=0,l=0;
+	char result[60]={0},ex[60]={0};
+	if(size[n2]>=size[n1]){
+		if(size[n2]==size[n1]){
+			for(i=1;i<60;i++){
+				if(num[n1][i]==num[n2][i]){
+					if(num[n1][i+1]<num[n2][i+1]){
+						num[n2][0]=1;
+						for(j=1;j<60;j++){
+							ex[j]=num[n1][j];
+							num[n1][j]=num[n2][j];
+							num[n2][j]=ex[j];
+						}
+					}
+				}
+			}
+		}
+		else{
+			num[n2][0]=1;
+			for(i=1;i<60;i++){
+				ex[i]=num[n1][i];
+				num[n1][i]=num[n2][i];
+				num[n2][i]=ex[i];
+			}
+		}
+	}
+	for(i=59;i>0;i--){
+		if(num[n1][i]>=num[n2][i]){
+			result[i]+=num[n1][i]-num[n2][i];
+			if(result[i]<0){
+				result[i]+=10;
+				result[i-1]-=1;
+			}
+		}
+		else{
+			result[i]+=num[n1][i]+10-num[n2][i];
+			result[i-1]-=1;
+		}
+	}
+	for(i=1;i<60;i++){
+		if(result[i]>0){
+			for(j=i;j<51;j++){
+				k++;
+			}
+			break;
+		}
+	}
+	for(i=0;i<60;i++){
+		if(num[n1][i]==num[n2][i]){
+			l++;
+		}
+	}
+	if(l==60){
+		k=1;
+	}
+	size[n2]=k;
+	for(i=1;i<60;i++){
+		num[n2][i]=result[i];
+	}
+	if(dot_count[n1]>dot_count[n2]){
+		dot_count[n2]=dot_count[n1];
+	}
+}void mul(int n1,int n2)
+{
+	int i,j,b=59,c1=0,t;
+	char result[200]={0};
+	for(i=59;i>0;i--){
+		for(j=59;j>0;j--){
+			if(num[n1][i] && num[n2][j])
+				result[118-i-j+1]+=(result[118-i-j]+num[n1][i]*num[n2][j])/10;
+			if(num[n1][i] && num[n2][j])
+				result[118-i-j]=(result[118-i-j]+num[n1][i]*num[n2][j])%10;
+		}
+	}
+	for(int a=size[n1]+size[n2];a>=0;--a)
+	{
+		if(result[18+a]){
+			size[n2]=a+1;
+			break;
+		}
+		else if(a==0)
+			size[n2]=1;
+	}
+	for(int a=9;a<67;++a,--b){
+		if(c1==0 && b > 50 && result[a]!=0){
+			c1++;
+			dot_count[n2] = b-50;
+		}
+		else if(c1 == 0 && b <= 50)
+			dot_count[n2] = 0;
+		num[n2][b]=result[a];
+	}
+}
+void di(int n1,int n2)
+{
+	int al=50;
+	char result[60]={0},ex[60]={0},cou=0;
+	for(int a=0;a<60;a++)
+		ex[a]=num[n2][a];
+	while(nu(n1,n2)==2){
+		for(int a= 59;a>=0;--a)
+			num[n2][a]=num[n2][a-1];
+		--al;
+		num[n2][0]=0;
+		for(int a=0;a<60;a++)
+			ex[a]=num[n2][a];
+	}
+	while(nu(n1,n2)==1){
+		for(int a=1;a<60;++a)
+			num[n2][a-1]=num[n2][a]
+				++al;
+		num[n2][0]=0;
+		for(int a=0;a<60;a++)
+			ex[a]=num[n2][a];                  //자리 바꿀때 어디에 0처리 할지 다시,, 자리바꾸기
+	}
+	while(nu(n1,n2)!=0&&al<=59){
+		min(n1,n2);
+		for(int a=0;a<60;++a)
+			num[n1][a]=num[n2][a];
+		for(int a=0;a<60;a++)
+			num[n2][a]=ex[a];
+        cou++;
+    }
+}
+
+
+
+
+	int nu(int n1,int n2)
+	{
+		for(i=0;i<60;i++){
+			if(num[n1][i]>num[n2][i]){
+				return 2;
+				break;
+			}
+			if(num[n1][i]<num[n2][i]){
+				return 1;
+				break;
+			}
+		}
+		return 0;
+	}
