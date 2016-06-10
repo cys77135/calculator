@@ -8,7 +8,7 @@ char what[100]={0};
 char re[60]={0};
 char vari[10]={0};
 char varn[10][62]={0};
-int v=0;
+int v=0,cn=0;
 int scan();
 void print(int);
 void sum(int,int);
@@ -21,6 +21,8 @@ void copy(int,int);
 void big(int,int);
 void put(int,int);
 void var();
+void save();
+void load();
 
 int main(){
     int i=0,j,count=0;
@@ -113,19 +115,19 @@ int scan(){
                     v=l;
                     break;
                 }
-            if(l==10){
-                for(t=0;t<10;t++){
-                    if(!vari[t]){
-                        vari[t]=a[0];
-                        v=t;
-                        break;
+                if(l==10){
+                    for(t=0;t<10;t++){
+                        if(!vari[t]){
+                            vari[t]=a[0];
+                            v=t;
+                            break;
+                        }
                     }
-                }
                 }
             }
         }
     }
-   
+
     if(!strcmp(a,"clear")){
         system("clear");
         return 0;
@@ -134,8 +136,13 @@ int scan(){
         var();
         return 0;
     }
+    if(!strcmp(a,"save")){
+        save();
+    }
     if(!strcmp(a,"end"))
         exit(1);
+    if(!strcmp(a,"load"))
+        load();
     for(n=0;n<100;n++){
         for(j=50,i=size[n];i>=1;i--,j--){
             num[n][j]=num[n][i];
@@ -148,7 +155,7 @@ void print(int n){
     int count=3,first,i;
     first=size[n]%3;
     printf("= ");
-    if(num[n][0])
+    if(num[n][0]) 
         printf("-");
     for(i=51-size[n];i<=50;i++){
         first--;
@@ -337,7 +344,7 @@ void di(int n1,int n2)
     }
     for(a=0;a<60;a++)
         ex[a]=num[n2][a];
-    
+
     while(nu(n1,n2)==2){
         for(a= 1;a<=59;++a)
             num[n2][a]=num[n2][a+1];
@@ -464,7 +471,7 @@ void put(int v,int n){
     varn[v][61]=dot_count[n];
 }
 void var(){
-    int i,j,a;
+    int i,o,j,a;
     for(i=0;i<10;i++){
         if(vari[i])
             printf("%c ",vari[i]);
@@ -475,6 +482,44 @@ void var(){
         size[0] = varn[i][60];
         dot_count[0] = varn[i][61];
         print(0);
+    }
 }
-    printf("\n");
+
+void save() {
+    int i,o;
+
+    FILE *fp = fopen("var.txt","a");
+
+    for(i=0;i<10;i++){
+        if(vari[i]!=0) {
+            fprintf(fp,"%c",vari[i]);
+        } else {
+            break;
+        }
+    
+        for(o=0;o<62;o++)
+        fprintf(fp,"%c",varn[i][o]);
+
+    }
+
+    fclose(fp);
+}
+
+void load() {
+    int i,j;
+
+    FILE *fp2 = fopen("var.txt","rt+");
+
+    for(i=0;i<10;i++){
+        fscanf(fp2,"%c",&vari[i]);
+
+        for(j=0;j<60;j++){
+            fscanf(fp2,"%c",&varn[i][j]);
+        }
+            fscanf(fp2,"%c",&varn[i][60]);
+            fscanf(fp2,"%c",&varn[i][61]);
+    }
+    fclose(fp2);
+
+
 }
