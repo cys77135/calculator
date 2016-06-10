@@ -109,8 +109,10 @@ int scan(){
         }
         else if(i==2&&(a[0]>='a'&&a[0]<='z')&&(a[1]==' '&&a[2]=='=')){
             for(l=0;l<=10;l++){
-                if(vari[l]==a[0])
+                if(vari[l]==a[0]){
                     v=l;
+                    break;
+                }
             if(l==10){
                 for(t=0;t<10;t++){
                     if(!vari[t]){
