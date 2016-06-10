@@ -6,6 +6,7 @@ char size[100]={0};
 char dot_count[100]={0};
 char what[100]={0};
 char re[60]={0};
+char b[10][1000]={0};
 int scan();
 void print(int);
 void sum(int,int);
@@ -18,7 +19,9 @@ void copy(int,int);
 
 int main(){
 	int i=0,j,count=0;
+	printf("Start....\n");
 	while(1){
+		printf("(input) ");
 		for(i=0;i<=100;i++){
 			for(j=0;j<60;j++)
 				num[i][j]=0;
@@ -58,7 +61,7 @@ int main(){
 }
 
 int scan(){
-	int n=0,i,j=1,k=0,max;
+	int n=0,i,j=1,k=0,l=-1,m=0,max;
 	char tmp;
 	char a[1000];
 	_Bool check_dot=0;
@@ -86,6 +89,15 @@ int scan(){
 			dot_count[n]+=1;
 			num[n][j++]=a[i]-'0';
 		}
+		/*else if(((a[i]>='a')&&(a[i]<='z'))||((a[i]>='A')&&(a[i]<='Z'))&&(a[i+2]=='=')){
+			n++;
+			m++;
+			what[k++]=a[i];
+			check_dot=0;
+			j=1;
+			what[k]='\0';
+			l++;
+		}*/
 		else if(a[i]=='\n')
 			break;
 		else if((a[i]=='+'||a[i]=='-'||a[i]=='*'||a[i]=='/'||a[i]=='%')&&!(a[i+1]>='0'&&a[i+1]<='9')){
@@ -108,10 +120,16 @@ int scan(){
 		exit(1);
 	for(n=0;n<100;n++){
 		for(j=50,i=size[n];i>=1;i--,j--){
+			/*if(m!=0){
+				b[l][j]=num[n][i];
+			}*/
 			num[n][j]=num[n][i];
 			num[n][i]=0;
 		}
 	}
+	/*if(m!=0){
+		m=0;
+	}*/
 	return 1;
 }
 void print(int n){
