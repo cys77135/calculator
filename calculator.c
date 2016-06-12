@@ -183,6 +183,8 @@ int scan(){
 		else if(a[i]=='\0') {                                     // 엔터 시 입력 중지
 			break;
 		}
+		else if(a[i]=='-')
+		continue;
 	        else if(m && a[i]=='='){                                 // = 두개 이상 에러
                 	printf("= error\n");
                    	return 0;
