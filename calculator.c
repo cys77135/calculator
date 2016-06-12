@@ -125,6 +125,10 @@ int scan(){
 				num[n][0]=1;
 			size[n]++;
 			num[n][j++]=a[i]-'0';
+			if(size[n]>50){
+			printf("= error\n");
+			return 0;
+			}
 		}
 		else if(check_dot&&a[i]=='.') {     // . 두 개 이상일 때 에러
 			printf("= error\n");
