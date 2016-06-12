@@ -30,6 +30,8 @@ void save();                                // save 함수
 
 int main(){
 	int i=0,j;
+	FILE *fp = fopen("var","a");        // 변수 저장 파일 생성
+    	fclose(fp);
 	printf("Start....\n");
 	while(1){
 		for(i=0;i<=100;i++){                // 배열 초기화
