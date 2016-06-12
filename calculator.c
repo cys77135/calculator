@@ -181,8 +181,16 @@ int scan(){
 		else if(a[i]=='\0') {                                     // 엔터 시 입력 중지
 			break;
 		}
-		else if(a[i]=='=') 
-			;
+	        else if(m && a[i]=='='){                                 // = 두개 이상 에러
+                	printf("= error\n");
+                   	return 0;
+		}
+        	else if(!((a[i-2]>='a'&&a[i-2]<='z')||(a[i-2]>='A'&&a[i-2]<='Z'))&&a[i]=='='){    // 그냥 = 에러
+        		    printf("= error\n");
+			  return 0;
+		}
+        	else if(a[i]=='=')
+        		  ++m;	
 		else { 
 			printf("= error\n");                               // 이외에 것 에러
 			return 0;
