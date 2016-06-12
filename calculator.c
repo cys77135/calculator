@@ -31,7 +31,7 @@ void save();                                // save 함수
 int main(){
 	int i=0,j;
 	FILE *fp = fopen("var","a");        // 변수 저장 파일 생성
-    	fclose(fp);
+	fclose(fp);
 	printf("Start....\n");
 	while(1){
 		for(i=0;i<=100;i++){                // 배열 초기화
@@ -78,12 +78,13 @@ void cal(){
 		}
 	}
 }
-/*********************************************************************************************************************
-******      입력할 때 수 사이에  띄어쓰기 연산자 띄어쓰기를 입력후 입력해야 계산이 됩니다.                     *******
-******      ex) 123456 + 123456       안그러면 error뜹니다.                                                    *******
-******      수는 100개까지 입력 가능합니다.                                                                    *******
-******      단항 앞에 붙는 -는 수에 붙여서 써주세요.                                                           *******
-**********************************************************************************************************************/
+
+/************************************************************************************************************************
+ ********      입력할 때 수 사이에  띄어쓰기 연산자 띄어쓰기를 입력후 입력해야 계산이 됩니다.                     *******
+ ********      ex) 123456 + 123456       안그러면 error뜹니다.                                                    *******
+ ********      수는 100개까지 입력 가능합니다.                                                                    *******
+ ********      단항 앞에 붙는 -는 수에 붙여서 써주세요.                                                           *******
+ ************************************************************************************************************************/
 
 int scan(){                            
 	int n=0,i,j=1,k=0,l=0,max,m=0;
@@ -125,10 +126,6 @@ int scan(){
 				num[n][0]=1;
 			size[n]++;
 			num[n][j++]=a[i]-'0';
-			if(size[n]>50){
-			printf("= error\n");
-			return 0;
-			}
 		}
 		else if(check_dot&&a[i]=='.') {     // . 두 개 이상일 때 에러
 			printf("= error\n");
@@ -171,7 +168,7 @@ int scan(){
 					check[n]=1;
 				else{
 					if(strlen(a)>1){
-						printf("=error\n");
+						printf("error\n");
 						return 0;
 					}
 					printf("= undefined\n");
@@ -192,17 +189,17 @@ int scan(){
 			break;
 		}
 		else if(a[i]=='-')
-		continue;
-	        else if(m && a[i]=='='){                                 // = 두개 이상 에러
-                	printf("= error\n");
-                   	return 0;
+			continue;
+		else if(m && a[i]=='='){                                 // = 두개 이상 에러
+			printf("= error\n");
+			return 0;
 		}
-        	else if(!((a[i-2]>='a'&&a[i-2]<='z')||(a[i-2]>='A'&&a[i-2]<='Z'))&&a[i]=='='){    // 그냥 = 에러
-        		    printf("= error\n");
-			  return 0;
+		else if(!((a[i-2]>='a'&&a[i-2]<='z')||(a[i-2]>='A'&&a[i-2]<='Z'))&&a[i]=='='){    // 그냥 = 에러
+			printf("= error\n");
+			return 0;
 		}
-        	else if(a[i]=='=')
-        		  ++m;	
+		else if(a[i]=='=')
+			++m;	
 		else { 
 			printf("= error\n");                               // 이외에 것 에러
 			return 0;
@@ -225,7 +222,7 @@ int scan(){
 }
 
 void print(int n){
-	int count=3,first,i;
+	int count=3,first,i,j=0;
 	first=size[n]%3;
 	printf("= ");
 	if(num[n][0])                                   // 단항 -부호 
@@ -242,8 +239,16 @@ void print(int n){
 			count=3;
 		}
 	}
-	if(dot_count[n]>0){                             // 소수점 뒷자리 ,  출력
+	if(dot_count[n]>0){  		// 소수점 뒷자리 ,  출력
 		count=0;
+		for(i=0;i<51;i++){
+			if(num[n][i]==0){
+				j++;
+			}
+		}
+		if(j==51){
+			printf("0");
+		}
 		printf(".");
 		for(i=51;i<=50+dot_count[n];i++){
 			printf("%d",num[n][i]);
@@ -394,8 +399,8 @@ void mul(int n1,int n2){
 		else if(a==0)
 			size[n2]=1;
 	}
-	dot_count[n2]+=dot_count[n1];                    // 소수점 아래 자리 확인
-	for(a=9;a<67;++a,--b)                       
+	dot_count[n2]+=dot_count[n1];
+	for(a=9;a<67;++a,--b)                          // 소수점 아래 자리 확인
 		num[n2][b]=result[a];
 }
 
@@ -502,6 +507,7 @@ void rem(int n1,int n2){
 		size[n2]=size[n1];
 	}
 }
+
 int nu(int n1,int n2){                          // 첫번째 수가 더크면 2 작으면 1 같으면 0
 	int i;
 	for(i=0;i<60;i++){
@@ -524,6 +530,7 @@ void copy(int n1,int n2){ 				//두 숫자 바꿀 때 복사
 	size[n2]=size[n1];
 	dot_count[n2]=dot_count[n1];
 }
+
 void put(int v,int n){                        // 59까진 일반 숫자배열 60은 자리수 61은 소수점 자리수
 	int i;
 	for(i=0;i<60;i++)
@@ -531,6 +538,7 @@ void put(int v,int n){                        // 59까진 일반 숫자배열 60
 	varn[v][60]=size[n];
 	varn[v][61]=dot_count[n];
 }
+
 void var(){                                  // 입력된 순서대로 변수와 그 숫자 출력
 	int i,j,a,u=0;
 	size[0]=0;
