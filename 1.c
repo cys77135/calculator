@@ -115,6 +115,10 @@ int scan(){
 			size[n]++;
 			num[n][j++]=a[i]-'0';
 		}
+		   else if(check_dot&&a[i]=='.') {     // . 두 개 이상일 때 에러
+            		printf("= error\n");
+        		 return 0;
+        	}
 		else if(a[i]=='.'){           // 소수점 확인 소수점 아래 숫자로 위치 변경
 			j=51;
 			check_dot=1;
@@ -123,9 +127,9 @@ int scan(){
 			dot_count[n]+=1;
 			num[n][j++]=a[i]-'0';
 		}
-		else if((a[i]=='+'||a[i]=='-'||a[i]=='*'||a[i]=='/'||a[i]=='%')&&!(a[i+1]>='0'&&a[i+1]<='9')){   // 연산 기호 저장
-			n++;                                                                   // 다음 숫자로 변경
-			what[k++]=a[i];
+		else if((a[i]=='+'||a[i]=='-'||a[i]=='*'||a[i]=='/'||a[i]=='%')&&!(a[i+1]>='0'&&a[i+1]<='9')){ 
+			n++;                   // 다음 숫자로 변경
+			what[k++]=a[i];        // 연산 기호 저장
 			check_dot=0;
 			j=1;
 			what[k]='\0';
@@ -167,9 +171,6 @@ int scan(){
 		} 
 		else if(a[i]=='\0')  {                                     // 엔터 시 입력 중지
 			break;
-		}
-		else if(a[i]=='=' || a[i]=='-' || a[i]=='.') {             //        
-			;
 		}
 		else { 
 			printf("= error\n");                               // 이외에 것 에러
