@@ -157,13 +157,13 @@ int scan(){
 				}
 			}
 			if(ck>=10){
-				printf("error\n");
+				printf("= error\n");
 				return 0;
 			}
 			ck++;
 		}
 		else if((a[i]=='(')||(a[i]==')')) {
-			printf("error\n");
+			printf("= error\n");
 			return 0;
 		} 
 		else if(a[i]=='\0')  {
@@ -173,7 +173,7 @@ int scan(){
 			;
 		}
 		else { 
-			printf("error\n");
+			printf("= error\n");
 			return 0;
 		}
 	}
