@@ -170,6 +170,10 @@ int scan(){
 				if(call(a[i],n))
 					check[n]=1;
 				else{
+					if(strlen(a)>1){
+						printf("=error\n");
+						return 0;
+					}
 					printf("= undefined\n");
 					return 0;
 				}
