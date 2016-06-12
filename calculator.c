@@ -390,15 +390,9 @@ void mul(int n1,int n2){
 		else if(a==0)
 			size[n2]=1;
 	}
-	for(a=9;a<67;++a,--b){                          // 소수점 아래 자리 확인
-		if(c1==0 && b > 50 && result[a]!=0){
-			c1++;
-			dot_count[n2] = b-50;
-		}
-		else if(c1 == 0 && b <= 50)
-			dot_count[n2] = 0;
+	dot_count[n2]+=dot_count[n1];                    // 소수점 아래 자리 확인
+	for(a=9;a<67;++a,--b)                       
 		num[n2][b]=result[a];
-	}
 }
 
 void di(int n1,int n2){
