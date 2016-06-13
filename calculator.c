@@ -479,7 +479,7 @@ void di(int n1,int n2){
 
 void rem(int n1,int n2){
 	int a;
-	if(nu(n1,n2)==2&&!num[n1][0]![num[n2][0]){                    // 나눠지는 수가 더 클때
+	if(nu(n1,n2)==2){                    // 나눠지는 수가 더 클때
 		di(n1,n2);                   // 나누기 함수 실행 후 나머지 받아오기
 		for(a=0;a<=60;a++)
 			num[n2][a]=re[a];
@@ -500,7 +500,6 @@ void rem(int n1,int n2){
 				dot_count[n2]=0;
 		}
 	}
-	else if( )
 	else if(nu(n1,n2)==0){                  // 두 수 같으면 0
 		for(a=0;a<60;++a)
 			num[n2][a]=0;
