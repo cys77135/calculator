@@ -246,9 +246,6 @@ void print(int n){
 				j++;
 			}
 		}
-		if(j==51){
-			printf("0");
-		}
 		printf(".");
 		for(i=51;i<=50+dot_count[n];i++){
 			printf("%d",num[n][i]);
