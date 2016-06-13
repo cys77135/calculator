@@ -168,7 +168,7 @@ int scan(){
 					check[n]=1;
 				else{
 					if(strlen(a)>1){
-						printf("error\n");
+						printf("= error\n");
 						return 0;
 					}
 					printf("= undefined\n");
