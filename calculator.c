@@ -435,16 +435,16 @@ void di(int n1,int n2){
 	while(al<=59&&nu(n1,n2)!=0){                   // 나눠지는 수가 더 클 때까지 빼기
 		while(nu(n1,n2)==2||nu(n1,n2)==0){
 			min(n1,n2);
-			for(a=0;a<60;++a)              // 나눠지는  수 교체
+			for(a=1;a<60;++a)              // 나눠지는  수 교체
 				num[n1][a]=num[n2][a];
-			for(a=0;a<60;a++)              // 나누는 수 교체
+			for(a=1;a<60;a++)              // 나누는 수 교체
 				num[n2][a]=ex[a];
 			cou++;
 		}
 		result[al]=cou;
 		cou=0;
 		if(al==50){                            // 몫이 정수 첫째자리일 때 나머지 저장
-			for(a=0;a<=60;++a)
+			for(a=1;a<=60;++a)
 				re[a]=num[n1][a];
 		}
 		if(nu(n1,n2)==0) break;                // 0이 되면 종료
