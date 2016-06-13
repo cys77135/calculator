@@ -406,11 +406,12 @@ void mul(int n1,int n2){
 
 void di(int n1,int n2){
 	int a,al=50;
-	char result[60]={0},ex[60]={0},cou=0;
-	if(num[n1][0]!=num[n2][0])
-		num[n2][0]=1;
-	else
-		num[n2][0]=0;
+	char result[60]={0},ex[60]={0},cou=0,mi=0;
+	 if(num[n1][0]&&!num[n2][0])
+	  mi++;
+	  else if(!num[n1][0]&&num[n2][0])
+          mi++;
+	 num[n1][0]=num[n2][0]=0;
 	for(a=1;a<60;a++)
 		ex[a]=num[n2][a];                       // 나누는 수 저장
 	while(nu(n1,n2)==2){                            // 나눠지는 수가 클 때 나누는 수 자리수 맞추기
@@ -472,11 +473,13 @@ void di(int n1,int n2){
 		else if(a==51)
 			dot_count[n2]=0;
 	}
+	if(mi)
+        num[n2][0]++;
 }
 
 void rem(int n1,int n2){
 	int a;
-	if(nu(n1,n2)==2){                    // 나눠지는 수가 더 클때
+	if(nu(n1,n2)==2&&!num[n1][0]![num[n2][0]){                    // 나눠지는 수가 더 클때
 		di(n1,n2);                   // 나누기 함수 실행 후 나머지 받아오기
 		for(a=0;a<=60;a++)
 			num[n2][a]=re[a];
@@ -497,6 +500,7 @@ void rem(int n1,int n2){
 				dot_count[n2]=0;
 		}
 	}
+	else if( )
 	else if(nu(n1,n2)==0){                  // 두 수 같으면 0
 		for(a=0;a<60;++a)
 			num[n2][a]=0;
